@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แทรกข้อความในรูปภาพและดาวน์โหลด</title>
+</head>
+<body>
+  <h1>แทรกข้อความในรูปภาพ</h1>
+  <form id="inputForm">
+    <label for="name">ชื่อ:</label>
+    <input type="text" id="name" placeholder="กรอกชื่อ"><br><br>
+    <label for="code">รหัสส่วนตัว:</label>
+    <input type="text" id="code" placeholder="กรอกรหัส"><br><br>
+    <button type="button" onclick="generateImage()">แทรกข้อความและดาวน์โหลด</button>
+  </form>
+  
+  <canvas id="canvas" style="display:none;"></canvas>
+  <br>
+  <a id="downloadLink" style="display:none;">ดาวน์โหลดรูปภาพ</a>
+
+  <script>
+    function generateImage() {
+      // ดึงข้อมูลจากฟอร์ม
+      const name = document.getElementById('name').value || "ชื่อของคุณ";
+      const code = document.getElementById('code').value || "รหัสของคุณ";
+
+      // โหลด Canvas และรูปภาพ Template
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.src = 'template.jpg'; // เปลี่ยนเป็นชื่อไฟล์รูปภาพของคุณ
+
+      img.onload = function () {
+        // ตั้งขนาด Canvas ให้เท่ากับรูปภาพ
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // วาดรูปภาพลงใน Canvas
+        ctx.drawImage(img, 0, 0);
+
+        // ตั้งค่าฟอนต์และตำแหน่งข้อความ
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black";
+        
+        // ใช้ Template Literals และแก้ไขการเรียก fillText
+        ctx.fillText(`ชื่อ: ${name}`, 50, 150);  // (ข้อความ, X, Y)
+        ctx.fillText(`รหัส: ${code}`, 50, 200);
+
+        // แสดงลิงก์ดาวน์โหลด
+        const downloadLink = document.getElementById('downloadLink');
+        downloadLink.style.display = 'inline';
+        downloadLink.href = canvas.toDataURL("image/png");
+        downloadLink.download = 'output.png';
+        downloadLink.textContent = 'ดาวน์โหลดรูปภาพ';
+      };
+    }
+  </script>
+</body>
+</html>
